@@ -3,7 +3,7 @@ package proit.test.controllers;
 import org.jooq.util.maven.example.tables.pojos.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import proit.test.models.OrgList;
+import proit.test.models.OrgListOnPage;
 import proit.test.services.OrgService;
 
 import java.util.List;
@@ -15,11 +15,22 @@ public class OrgController {
     @Autowired
     private OrgService service;
 
+//    @CrossOrigin(origins = "http://localhost:3000")
+//    @GetMapping("/organization")
+//    public List<OrgList> showOrg() {
+//        return service.listOrgAndEmpl();
+//    }
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/organization")
-    public List<OrgList> showOrg() {
-        return service.listOrgAndEmpl();
+    public OrgListOnPage showPageOrg() {
+        return new OrgListOnPage(service.getCountOrg(), service.listOrgAndEmpl(0, 10));
     }
+
+//    @CrossOrigin(origins = "http://localhost:3000")
+//    @GetMapping("/organization")
+//    public int countOrg() {
+//        return service.getCountOrg();
+//    }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/organization/create")

@@ -10,13 +10,14 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequestMapping(value = "/employee")
 public class EmplController {
 
     @Autowired
     private EmplService service;
 
     @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping("/employee")
+    @GetMapping
     public List<EmplList> showEmpl() {
         return service.selectAll();
     }

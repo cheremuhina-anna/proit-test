@@ -18,7 +18,7 @@ public class OrgRepo {
     @Autowired
     private DSLContext dsl;
 
-    public List<OrgList> selectAll(){
+    public List<OrgList> selectAll(int offset, int limit){
         org.jooq.util.maven.example.tables.Organization org1 = ORGANIZATION.as("org1");
         org.jooq.util.maven.example.tables.Organization org2 = ORGANIZATION.as("org2");
 
@@ -28,10 +28,16 @@ public class OrgRepo {
                 .leftJoin(EMPLOYEE)
                 .on(org1.ID.eq(EMPLOYEE.ID_ORG))
                 .groupBy(org1.ID, org2.NAME)
+                .offset(offset)
+                .limit(limit)
                 .fetchInto(OrgList.class);
 
         // .limit()
         // .offset()
+    }
+
+    public int countOrg(){
+        return dsl.fetchCount(ORGANIZATION);
     }
 
     public List<Organization> select(){
@@ -39,11 +45,11 @@ public class OrgRepo {
                 .fetchInto(Organization.class);
     }
 
-    public UUID insert(Organization org){
+    public Organization insert(Organization org){
         return dsl.insertInto(ORGANIZATION, ORGANIZATION.NAME, ORGANIZATION.ID_HEADORG)
                 .values(org.getName(), org.getIdHeadorg())
-                .returning(ORGANIZATION.ID)
-                .fetchOne().getId();
+                .returning()
+                .fetchOne().into(Organization.class);//.getId();
     }
 
     public int update(Organization org){

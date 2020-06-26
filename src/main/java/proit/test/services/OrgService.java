@@ -15,15 +15,17 @@ public class OrgService {
     @Autowired
     private OrgRepo repo;
 
-    public List<OrgList> listOrgAndEmpl(){
-        return repo.selectAll();
+    public List<OrgList> listOrgAndEmpl(int offset, int limit){
+        return repo.selectAll(offset, limit);
     }
 
     public List<Organization> list() { return repo.select();}
 
+    public int getCountOrg(){ return repo.countOrg(); }
+
     public Organization insert(Organization org){
-        UUID id = repo.insert(org);
-        return new Organization(id, org.getName(), org.getIdHeadorg());
+        return repo.insert(org);
+//        return new Organization(id, org.getName(), org.getIdHeadorg());
     }
 
     public Organization update(Organization org){
