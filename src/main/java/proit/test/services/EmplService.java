@@ -4,8 +4,11 @@ import org.jooq.util.maven.example.tables.pojos.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import proit.test.models.EmplList;
+import proit.test.models.EmplNode;
 import proit.test.repositories.EmplRepo;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +44,26 @@ public class EmplService {
         else {
             repo.delete(id_empl);
             return true;
+        }
+    }
+
+    public List<EmplNode> getAllTree(){
+        List<EmplNode> list = new ArrayList<>();
+        for (Employee item: repo.emplDontHaveHead()) {
+            list.add(new EmplNode(item, getChildren(item.getId())));
+        }
+        return list;
+    }
+
+    public List<EmplNode> getChildren(UUID id){
+        List <Employee> subEmpl = repo.subEmpl(id);
+        if (subEmpl.size() == 0) return Collections.emptyList();
+        else {
+            List<EmplNode> list = new ArrayList<>();
+            for (Employee item : subEmpl) {
+                list.add(new EmplNode(item, getChildren(item.getId())));
+            }
+            return list;
         }
     }
 }

@@ -46,9 +46,21 @@ public class OrgController {
         return service.delete(id_org);
     }
 
+//    @CrossOrigin(origins = "http://localhost:3000")
+//    @GetMapping("/organization/tree")
+//    public List<OrgNode> listRoots() {
+//        return service.getNodes();
+//    }
+//
+//    @CrossOrigin(origins = "http://localhost:3000")
+//    @GetMapping("/organization/tree/{id_org}")
+//    public List<OrgNode> listChildren(@PathVariable("id_org") UUID id_org) {
+//        return service.getChildrenNodes(id_org);
+//    }
+
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/organization/tree")
-    public List<OrgNode> listRoots() {
-        return service.getNodes();
+    public List<OrgNode> allTree() {
+        return service.getAllTree();
     }
 }

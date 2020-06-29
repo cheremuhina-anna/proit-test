@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.jooq.util.maven.example.tables.pojos.Organization;
+import org.jooq.util.maven.example.tables.pojos.Employee;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrgNode {
-    Organization value;
-    List<OrgNode> subItems;
+public class EmplNode {
+    Employee value;
+    List<EmplNode> subItems;
 }

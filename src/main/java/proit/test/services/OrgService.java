@@ -8,6 +8,7 @@ import proit.test.models.OrgNode;
 import proit.test.repositories.OrgRepo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,15 +48,44 @@ public class OrgService {
         }
     }
 
-    public List<OrgNode> getNodes(){
+//    public List<OrgNode> getNodes(){
+//        List<OrgNode> list = new ArrayList<>();
+//        for (Organization item: repo.orgDontHaveHead()) {
+//            if (repo.countSubOrg(item.getId()) > 0) list.add(new OrgNode(item,true));
+//            else list.add(new OrgNode(item,false));
+//        }
+//        return list;
+//    }
+
+    public List<OrgNode> getAllTree(){
         List<OrgNode> list = new ArrayList<>();
         for (Organization item: repo.orgDontHaveHead()) {
-            if (repo.countSubOrg(item.getId()) > 0) list.add(new OrgNode(item,true));
-            else list.add(new OrgNode(item,false));
+            list.add(new OrgNode(item, getChildren(item.getId())));
         }
-//        repo.orgDontHaveHead().forEach(x-> repo.countSubOrg(x.getId()) > 0 ? list.add(new OrgNode(x,true)) : list.add(new OrgNode(x,false)));
         return list;
     }
+
+    public List<OrgNode> getChildren(UUID id){
+        List <Organization> subOrgs = repo.subOrg(id);
+        if (subOrgs.size() == 0) return Collections.emptyList();
+        else {
+            List<OrgNode> list = new ArrayList<>();
+            for (Organization item : subOrgs) {
+                list.add(new OrgNode(item, getChildren(item.getId())));
+            }
+            return list;
+        }
+    }
+
+
+//    public List<OrgNode> getChildrenNodes(UUID id){
+//        List<OrgNode> list = new ArrayList<>();
+//        for (Organization item: repo.subOrg(id)) {
+//            if (repo.countSubOrg(item.getId()) > 0) list.add(new OrgNode(item,true));
+//            else list.add(new OrgNode(item,false));
+//        }
+//        return list;
+//    }
 
     public List<Organization> getOrgWithoutHeadOrg() {
         return repo.orgDontHaveHead();

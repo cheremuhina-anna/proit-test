@@ -75,4 +75,18 @@ public class EmplRepo {
                 .where(EMPLOYEE.ID.eq(id_empl))
                 .execute();
     }
+
+    public List<Employee> subEmpl(UUID id_headEmpl) {
+        return dsl.select(EMPLOYEE.asterisk())
+                .from(EMPLOYEE)
+                .where(EMPLOYEE.ID_HEADEMPL.eq(id_headEmpl))
+                .fetchInto(Employee.class);
+    }
+
+    public List<Employee> emplDontHaveHead(){
+        return dsl.select(EMPLOYEE.asterisk())
+                .from(EMPLOYEE)
+                .where(EMPLOYEE.ID_HEADEMPL.isNull())
+                .fetchInto(Employee.class);
+    }
 }

@@ -4,6 +4,7 @@ import org.jooq.util.maven.example.tables.pojos.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import proit.test.models.EmplListOnPage;
+import proit.test.models.EmplNode;
 import proit.test.services.EmplService;
 
 import java.util.List;
@@ -44,5 +45,11 @@ public class EmplController {
     @DeleteMapping("/{id_empl}")
     public boolean deleteEmpl(@PathVariable("id_empl") UUID id_empl) {
         return service.delete(id_empl);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/tree")
+    public List<EmplNode> allTree() {
+        return service.getAllTree();
     }
 }
