@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrgListOnPage {
-    int countOrgs;
-    List<OrgList> listOnPage;
+public class EmplListOnPage {
+    int countEmpls;
+    List<EmplList> listOnPage;
 }

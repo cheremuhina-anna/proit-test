@@ -18,7 +18,7 @@ public class OrgRepo {
     @Autowired
     private DSLContext dsl;
 
-    public List<OrgList> selectAll(int offset, int limit){
+    public List<OrgList> selectPage(int offset, int limit){
         org.jooq.util.maven.example.tables.Organization org1 = ORGANIZATION.as("org1");
         org.jooq.util.maven.example.tables.Organization org2 = ORGANIZATION.as("org2");
 
@@ -31,9 +31,6 @@ public class OrgRepo {
                 .offset(offset)
                 .limit(limit)
                 .fetchInto(OrgList.class);
-
-        // .limit()
-        // .offset()
     }
 
     public int countOrg(){
@@ -73,5 +70,27 @@ public class OrgRepo {
         dsl.delete(ORGANIZATION)
                 .where(ORGANIZATION.ID.eq(id_org))
                 .execute();
+    }
+
+    public List<Organization> subOrg(UUID id_headOrg) {
+        return dsl.select(ORGANIZATION.asterisk())
+                .from(ORGANIZATION)
+                .where(ORGANIZATION.ID_HEADORG.eq(id_headOrg))
+                .fetchInto(Organization.class);
+    }
+
+    public int countSubOrg(UUID id_headOrg) {
+        return dsl.selectCount()
+                .from(ORGANIZATION)
+                .where(ORGANIZATION.ID_HEADORG.eq(id_headOrg))
+                .fetchOne(0, int.class);
+    }
+
+    public List<Organization> orgDontHaveHead(){
+        return dsl.select(ORGANIZATION.asterisk())
+                .from(ORGANIZATION)
+                .where(ORGANIZATION.ID_HEADORG.isNull())
+                .fetchInto(Organization.class);
+
     }
 }

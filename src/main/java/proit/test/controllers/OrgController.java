@@ -4,6 +4,7 @@ import org.jooq.util.maven.example.tables.pojos.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import proit.test.models.OrgListOnPage;
+import proit.test.models.OrgNode;
 import proit.test.services.OrgService;
 
 import java.util.List;
@@ -15,22 +16,11 @@ public class OrgController {
     @Autowired
     private OrgService service;
 
-//    @CrossOrigin(origins = "http://localhost:3000")
-//    @GetMapping("/organization")
-//    public List<OrgList> showOrg() {
-//        return service.listOrgAndEmpl();
-//    }
     @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping("/organization")
-    public OrgListOnPage showPageOrg() {
-        return new OrgListOnPage(service.getCountOrg(), service.listOrgAndEmpl(0, 10));
+    @GetMapping("/organization/")
+    public OrgListOnPage showPageOrg(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
+        return new OrgListOnPage(service.getCountOrg(), service.pageListOrgAndEmpl(offset, limit));
     }
-
-//    @CrossOrigin(origins = "http://localhost:3000")
-//    @GetMapping("/organization")
-//    public int countOrg() {
-//        return service.getCountOrg();
-//    }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/organization/create")
@@ -54,5 +44,11 @@ public class OrgController {
     @DeleteMapping("/organization/{id_org}")
     public boolean deleteOrg(@PathVariable("id_org") UUID id_org) { ;
         return service.delete(id_org);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/organization/tree")
+    public List<OrgNode> listRoots() {
+        return service.getNodes();
     }
 }

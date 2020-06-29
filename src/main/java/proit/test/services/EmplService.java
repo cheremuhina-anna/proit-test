@@ -15,9 +15,13 @@ public class EmplService {
     @Autowired
     private EmplRepo repo;
 
-    public List<EmplList> selectAll(){
-        return repo.selectAll();
+    public List<EmplList> selectPage(int offset, int limit){
+        return repo.selectPage(offset, limit);
     }
+
+    public int countEmpl(){return repo.countEmpl();}
+
+    public List<Employee> list() { return repo.select();}
 
     public List<Employee> selectEmplOrg(UUID id_org) { return  repo.selectEmplOrg(id_org); }
 

@@ -4,8 +4,10 @@ import org.jooq.util.maven.example.tables.pojos.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import proit.test.models.OrgList;
+import proit.test.models.OrgNode;
 import proit.test.repositories.OrgRepo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,8 +17,8 @@ public class OrgService {
     @Autowired
     private OrgRepo repo;
 
-    public List<OrgList> listOrgAndEmpl(int offset, int limit){
-        return repo.selectAll(offset, limit);
+    public List<OrgList> pageListOrgAndEmpl(int offset, int limit){
+        return repo.selectPage(offset, limit);
     }
 
     public List<Organization> list() { return repo.select();}
@@ -43,5 +45,23 @@ public class OrgService {
             repo.delete(id_org);
             return true;
         }
+    }
+
+    public List<OrgNode> getNodes(){
+        List<OrgNode> list = new ArrayList<>();
+        for (Organization item: repo.orgDontHaveHead()) {
+            if (repo.countSubOrg(item.getId()) > 0) list.add(new OrgNode(item,true));
+            else list.add(new OrgNode(item,false));
+        }
+//        repo.orgDontHaveHead().forEach(x-> repo.countSubOrg(x.getId()) > 0 ? list.add(new OrgNode(x,true)) : list.add(new OrgNode(x,false)));
+        return list;
+    }
+
+    public List<Organization> getOrgWithoutHeadOrg() {
+        return repo.orgDontHaveHead();
+    }
+
+    public List<Organization> getSubOrg(UUID id_org) {
+        return repo.subOrg(id_org);
     }
 }

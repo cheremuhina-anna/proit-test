@@ -18,7 +18,7 @@ public class EmplRepo {
     @Autowired
     private DSLContext dsl;
 
-    public List<EmplList> selectAll(){
+    public List<EmplList> selectPage(int offset, int limit){
         org.jooq.util.maven.example.tables.Employee empl1 = EMPLOYEE.as("empl1");
         org.jooq.util.maven.example.tables.Employee empl2 = EMPLOYEE.as("empl2");
         return dsl.select(empl1.asterisk(), ORGANIZATION.NAME.as("name_org"), empl2.NAME.as("name_headempl"))
@@ -27,7 +27,18 @@ public class EmplRepo {
                 .onKey()
                 .leftJoin(empl2)
                 .on(empl1.ID_HEADEMPL.eq(empl2.ID))
+                .offset(offset)
+                .limit(limit)
                 .fetchInto(EmplList.class);
+    }
+
+    public int countEmpl(){
+        return dsl.fetchCount(EMPLOYEE);
+    }
+
+    public List<Employee> select(){
+        return dsl.selectFrom(EMPLOYEE)
+                .fetchInto(Employee.class);
     }
 
     public List<Employee> selectEmplOrg(UUID id_org){
