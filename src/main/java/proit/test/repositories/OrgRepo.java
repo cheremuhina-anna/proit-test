@@ -42,6 +42,13 @@ public class OrgRepo {
                 .fetchInto(Organization.class);
     }
 
+    public Organization selectOrg(UUID id_org){
+        return dsl.selectFrom(ORGANIZATION)
+                .where(ORGANIZATION.ID.eq(id_org))
+                .fetchAny()
+                .into(Organization.class);
+    }
+
     public Organization insert(Organization org){
         return dsl.insertInto(ORGANIZATION, ORGANIZATION.NAME, ORGANIZATION.ID_HEADORG)
                 .values(org.getName(), org.getIdHeadorg())
@@ -92,5 +99,13 @@ public class OrgRepo {
                 .where(ORGANIZATION.ID_HEADORG.isNull())
                 .fetchInto(Organization.class);
 
+    }
+
+    public Organization headOrg(UUID id_headOrg) {
+        return dsl.select(ORGANIZATION.asterisk())
+                .from(ORGANIZATION)
+                .where(ORGANIZATION.ID.eq(id_headOrg))
+                .fetchAny()
+                .into(Organization.class);
     }
 }

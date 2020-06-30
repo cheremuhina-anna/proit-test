@@ -33,10 +33,7 @@ public class OrgService {
 
     public Organization update(Organization org){
         int res = repo.update(org);
-//        if(res==1)
-            return org;
-//        else
-//            return new Organization();
+        return org;
     }
 
     public boolean delete(UUID id_org){
@@ -47,15 +44,6 @@ public class OrgService {
             return true;
         }
     }
-
-//    public List<OrgNode> getNodes(){
-//        List<OrgNode> list = new ArrayList<>();
-//        for (Organization item: repo.orgDontHaveHead()) {
-//            if (repo.countSubOrg(item.getId()) > 0) list.add(new OrgNode(item,true));
-//            else list.add(new OrgNode(item,false));
-//        }
-//        return list;
-//    }
 
     public List<OrgNode> getAllTree(){
         List<OrgNode> list = new ArrayList<>();
@@ -77,15 +65,48 @@ public class OrgService {
         }
     }
 
+    public List<Organization> getHeadOrgs(UUID id_headOrg) {
+        List<Organization> headOrgs = new ArrayList<>();
+        Organization headOrg = repo.headOrg(id_headOrg);
+        headOrgs.add(headOrg);
+        System.out.println(headOrg);
+        while (headOrg.getIdHeadorg() != null) {
+            headOrg = repo.headOrg(headOrg.getIdHeadorg());
+            headOrgs.add(headOrg);
+            System.out.println(headOrg);
+        }
+        return headOrgs;
+    }
 
-//    public List<OrgNode> getChildrenNodes(UUID id){
-//        List<OrgNode> list = new ArrayList<>();
-//        for (Organization item: repo.subOrg(id)) {
-//            if (repo.countSubOrg(item.getId()) > 0) list.add(new OrgNode(item,true));
-//            else list.add(new OrgNode(item,false));
-//        }
-//        return list;
-//    }
+    public List<Organization> listWithoutSubOrgs(UUID id_org) {
+        List<Organization> list = list();
+        list.removeAll(listAllSubOrgs(id_org));
+        return list;
+    }
+
+
+    public List<Organization> listAllSubOrgs(UUID id_org) {
+        OrgNode temp = new OrgNode(getChildren(id_org));
+        List<Organization> list = new ArrayList<>();
+        list.add(repo.selectOrg(id_org));
+        for (OrgNode node: temp.getSubItems()) {
+            list.add(node.getValue());
+            list.addAll(orgFromNodes(node));
+        }
+        return list;
+    }
+
+    public List<Organization> orgFromNodes(OrgNode node){
+        if(node.getSubItems().isEmpty()) return Collections.emptyList();
+        else {
+            List<Organization> list = new ArrayList<>();
+            for (OrgNode item : node.getSubItems()) {
+                list.add(item.getValue());
+                list.addAll(orgFromNodes(item));
+            }
+            return list;
+        }
+    }
 
     public List<Organization> getOrgWithoutHeadOrg() {
         return repo.orgDontHaveHead();

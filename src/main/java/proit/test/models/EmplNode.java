@@ -15,4 +15,8 @@ import java.util.List;
 public class EmplNode {
     Employee value;
     List<EmplNode> subItems;
+
+    public EmplNode(List<EmplNode> subItems) {
+        this.subItems = subItems;
+    }
 }

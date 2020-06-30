@@ -15,4 +15,8 @@ import java.util.List;
 public class OrgNode {
     Organization value;
     List<OrgNode> subItems;
+
+    public OrgNode(List<OrgNode> subItems) {
+        this.subItems = subItems;
+    }
 }

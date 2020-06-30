@@ -68,6 +68,7 @@
                                 </target>
                                 <generate>
                                     <pojos>true</pojos>
+                                    <pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>
                                     <validationAnnotations>true</validationAnnotations>
                                     <springAnnotations>true</springAnnotations>
                                     <globalObjectReferences>true</globalObjectReferences>

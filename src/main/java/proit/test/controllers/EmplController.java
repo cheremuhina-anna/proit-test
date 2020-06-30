@@ -52,4 +52,10 @@ public class EmplController {
     public List<EmplNode> allTree() {
         return service.getAllTree();
     }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/update")
+    public List<Employee> getOrganizations(@RequestParam("id_empl") UUID id_empl, @RequestParam("id_org") UUID id_org) {
+        return service.listWithoutSubEmpls(id_empl, id_org);
+    }
 }

@@ -33,9 +33,15 @@ public class EmplService {
         return new Employee(id, empl.getName(), empl.getIdOrg(), empl.getIdHeadempl());
     }
 
-    public Employee update(Employee empl){
-        int res = repo.update(empl);
-        return empl;
+    public Employee update(Employee newEmpl){
+        Employee targetEmpl = repo.selectEmpl(newEmpl.getId());
+        if (targetEmpl.getIdOrg() != newEmpl.getIdOrg()) {
+            List<Employee> subEmpl = repo.subEmpl(newEmpl.getId());
+            if (!subEmpl.isEmpty())
+                subEmpl.stream().peek(sub->sub.setIdHeadempl(null)).forEach(sub->repo.update(sub));
+        }
+        int res = repo.update(newEmpl);
+        return newEmpl;
     }
 
     public boolean delete(UUID id_empl){
@@ -62,6 +68,36 @@ public class EmplService {
             List<EmplNode> list = new ArrayList<>();
             for (Employee item : subEmpl) {
                 list.add(new EmplNode(item, getChildren(item.getId())));
+            }
+            return list;
+        }
+    }
+
+    public List<Employee> listWithoutSubEmpls(UUID id_empl, UUID id_org) {
+        List<Employee> list = selectEmplOrg(id_org);
+        list.removeAll(listAllSubEmpls(id_empl));
+        return list;
+    }
+
+
+    public List<Employee> listAllSubEmpls(UUID id_empl) {
+        EmplNode temp = new EmplNode(getChildren(id_empl));
+        List<Employee> list = new ArrayList<>();
+        list.add(repo.selectEmpl(id_empl));
+        for (EmplNode node: temp.getSubItems()) {
+            list.add(node.getValue());
+            list.addAll(emplFromNodes(node));
+        }
+        return list;
+    }
+
+    public List<Employee> emplFromNodes(EmplNode node){
+        if(node.getSubItems().isEmpty()) return Collections.emptyList();
+        else {
+            List<Employee> list = new ArrayList<>();
+            for (EmplNode item : node.getSubItems()) {
+                list.add(item.getValue());
+                list.addAll(emplFromNodes(item));
             }
             return list;
         }

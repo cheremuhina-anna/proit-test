@@ -41,6 +41,13 @@ public class EmplRepo {
                 .fetchInto(Employee.class);
     }
 
+    public Employee selectEmpl(UUID id_empl){
+        return dsl.selectFrom(EMPLOYEE)
+                .where(EMPLOYEE.ID.eq(id_empl))
+                .fetchAny()
+                .into(Employee.class);
+    }
+
     public List<Employee> selectEmplOrg(UUID id_org){
         return dsl.selectFrom(EMPLOYEE)
                 .where(EMPLOYEE.ID_ORG.eq(id_org))
