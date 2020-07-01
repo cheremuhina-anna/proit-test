@@ -34,6 +34,7 @@ public class EmplService {
     }
 
     public Employee update(Employee newEmpl){
+        System.out.println(newEmpl);
         Employee targetEmpl = repo.selectEmpl(newEmpl.getId());
         if (targetEmpl.getIdOrg() != newEmpl.getIdOrg()) {
             List<Employee> subEmpl = repo.subEmpl(newEmpl.getId());
@@ -81,14 +82,17 @@ public class EmplService {
 
 
     public List<Employee> listAllSubEmpls(UUID id_empl) {
-        EmplNode temp = new EmplNode(getChildren(id_empl));
-        List<Employee> list = new ArrayList<>();
-        list.add(repo.selectEmpl(id_empl));
-        for (EmplNode node: temp.getSubItems()) {
-            list.add(node.getValue());
-            list.addAll(emplFromNodes(node));
+        if(id_empl == null) return Collections.emptyList();
+        else {
+            EmplNode temp = new EmplNode(getChildren(id_empl));
+            List<Employee> list = new ArrayList<>();
+            list.add(repo.selectEmpl(id_empl));
+            for (EmplNode node : temp.getSubItems()) {
+                list.add(node.getValue());
+                list.addAll(emplFromNodes(node));
+            }
+            return list;
         }
-        return list;
     }
 
     public List<Employee> emplFromNodes(EmplNode node){
