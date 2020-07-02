@@ -122,4 +122,8 @@ public class OrgService {
         else
             return repo.filterOrgList(str, offset, limit);
     }
+
+    public int getCountFilterList(String filter) {
+        return repo.countFilterOrg(filter);
+    }
 }

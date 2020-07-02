@@ -117,4 +117,12 @@ public class OrgRepo {
                 .fetchInto(OrgList.class);
 
     }
+
+    public int countFilterOrg(String str){
+        return dsl.selectCount()
+                .from(ORGANIZATION)
+                .where(ORGANIZATION.NAME.like(str+'%'))
+                .fetchOne(0, int.class);
+    }
+
 }

@@ -126,4 +126,20 @@ public class EmplRepo {
                 .limit(limit)
                 .fetchInto(EmplList.class);
     }
+
+    public int countNameFilterEmpl(String str){
+        return dsl.selectCount()
+                .from(EMPLOYEE)
+                .where(EMPLOYEE.NAME.like(str+'%'))
+                .fetchOne(0, int.class);
+    }
+
+    public int countOrgFilterEmpl(String str){
+        return dsl.selectCount()
+                .from(EMPLOYEE)
+                .leftJoin(ORGANIZATION)
+                .onKey()
+                .where(ORGANIZATION.NAME.like(str+'%'))
+                .fetchOne(0, int.class);
+    }
 }

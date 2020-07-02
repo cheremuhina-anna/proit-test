@@ -26,8 +26,7 @@ public class OrgController {
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/organization/{filter}")
     public OrgListOnPage showPageOrg(@PathVariable("filter") String filter, @RequestParam("offset") int offset, @RequestParam("limit") int limit) {
-        List<OrgList> listOrg = service.getFilterOrgList(filter, offset, limit);
-        return new OrgListOnPage(listOrg.size(), listOrg);
+        return new OrgListOnPage(service.getCountFilterList(filter), service.getFilterOrgList(filter, offset, limit));
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
@@ -44,13 +43,13 @@ public class OrgController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("/organization/update")
-    public Organization updateOrg(@RequestBody Organization org) { ;
+    public Organization updateOrg(@RequestBody Organization org) {
         return service.update(org);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @DeleteMapping("/organization/{id_org}")
-    public boolean deleteOrg(@PathVariable("id_org") UUID id_org) { ;
+    public boolean deleteOrg(@PathVariable("id_org") UUID id_org) {
         return service.delete(id_org);
     }
 

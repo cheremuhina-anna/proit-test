@@ -27,9 +27,8 @@ public class EmplController {
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/{type}/{filter}")
     public EmplListOnPage showPageOrg(@PathVariable("type") String type, @PathVariable("filter") String filter, @RequestParam("offset") int offset, @RequestParam("limit") int limit) {
-        System.out.println(filter);
-        List<EmplList> listEmpl = service.getFilterEmplList(type, filter, offset, limit);
-        return new EmplListOnPage(listEmpl.size(), listEmpl);
+        System.out.println(type+" "+filter+" "+offset+" "+limit);
+        return service.getFilterEmplList(type, filter, offset, limit);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")

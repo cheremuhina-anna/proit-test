@@ -4,6 +4,7 @@ import org.jooq.util.maven.example.tables.pojos.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import proit.test.models.EmplList;
+import proit.test.models.EmplListOnPage;
 import proit.test.models.EmplNode;
 import proit.test.repositories.EmplRepo;
 
@@ -106,14 +107,18 @@ public class EmplService {
         }
     }
 
-    public List<EmplList> getFilterEmplList(String type, String str, int offset, int limit) {
-        if (str.isEmpty())
-            return repo.selectPage(offset, limit);
-        else {
-            if (type.equals("name"))
-                return repo.namefilterEmplList(str, offset, limit);
-            else
-                return repo.orgfilterEmplList(str, offset, limit);
-        }
+    public EmplListOnPage getFilterEmplList(String type, String str, int offset, int limit) {
+        if (type.equals("name"))
+            return new EmplListOnPage(repo.countNameFilterEmpl(str), repo.namefilterEmplList(str, offset, limit));
+        else
+            return new EmplListOnPage(repo.countOrgFilterEmpl(str), repo.orgfilterEmplList(str, offset, limit));
+    }
+
+    public int getCountNameFilterList(String filter) {
+        return repo.countNameFilterEmpl(filter);
+    }
+
+    public int getCountOrgFilterList(String filter) {
+        return repo.countOrgFilterEmpl(filter);
     }
 }
