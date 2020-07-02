@@ -53,7 +53,7 @@
                                 <driver>org.postgresql.Driver</driver>
                                 <url>jdbc:postgresql://localhost:5432/org_and_empl</url>
                                 <user>postgres</user>
-                                <password>student16</password>
+                                <password>admin</password>
                             </jdbc>
 
                             <generator>

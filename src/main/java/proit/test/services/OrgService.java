@@ -37,7 +37,7 @@ public class OrgService {
     }
 
     public boolean delete(UUID id_org){
-        if (repo.canDelete(id_org).size()>0)
+        if (repo.countSubOrg(id_org)>0)
             return false;
         else {
             repo.delete(id_org);
@@ -114,5 +114,9 @@ public class OrgService {
 
     public List<Organization> getSubOrg(UUID id_org) {
         return repo.subOrg(id_org);
+    }
+
+    public List<OrgList> getFilterOrgList(String str, int offset, int limit) {
+        return repo.filterOrgList(str, offset, limit);
     }
 }

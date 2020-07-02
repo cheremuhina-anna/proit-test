@@ -34,7 +34,6 @@ public class EmplService {
     }
 
     public Employee update(Employee newEmpl){
-        System.out.println(newEmpl);
         Employee targetEmpl = repo.selectEmpl(newEmpl.getId());
         if (targetEmpl.getIdOrg() != newEmpl.getIdOrg()) {
             List<Employee> subEmpl = repo.subEmpl(newEmpl.getId());
