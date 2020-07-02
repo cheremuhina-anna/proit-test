@@ -117,6 +117,9 @@ public class OrgService {
     }
 
     public List<OrgList> getFilterOrgList(String str, int offset, int limit) {
-        return repo.filterOrgList(str, offset, limit);
+        if (str.isEmpty())
+            return repo.selectPage(offset, limit);
+        else
+            return repo.filterOrgList(str, offset, limit);
     }
 }

@@ -96,4 +96,34 @@ public class EmplRepo {
                 .where(EMPLOYEE.ID_HEADEMPL.isNull())
                 .fetchInto(Employee.class);
     }
+
+    public List<EmplList> namefilterEmplList(String str, int offset, int limit) {
+        org.jooq.util.maven.example.tables.Employee empl1 = EMPLOYEE.as("empl1");
+        org.jooq.util.maven.example.tables.Employee empl2 = EMPLOYEE.as("empl2");
+        return dsl.select(empl1.asterisk(), ORGANIZATION.NAME.as("name_org"), empl2.NAME.as("name_headempl"))
+                .from(empl1)
+                .leftJoin(ORGANIZATION)
+                .onKey()
+                .leftJoin(empl2)
+                .on(empl1.ID_HEADEMPL.eq(empl2.ID))
+                .where(empl1.NAME.like(str+'%'))
+                .offset(offset)
+                .limit(limit)
+                .fetchInto(EmplList.class);
+    }
+
+    public List<EmplList> orgfilterEmplList(String str, int offset, int limit) {
+        org.jooq.util.maven.example.tables.Employee empl1 = EMPLOYEE.as("empl1");
+        org.jooq.util.maven.example.tables.Employee empl2 = EMPLOYEE.as("empl2");
+        return dsl.select(empl1.asterisk(), ORGANIZATION.NAME.as("name_org"), empl2.NAME.as("name_headempl"))
+                .from(empl1)
+                .leftJoin(ORGANIZATION)
+                .onKey()
+                .leftJoin(empl2)
+                .on(empl1.ID_HEADEMPL.eq(empl2.ID))
+                .where(ORGANIZATION.NAME.like(str+'%'))
+                .offset(offset)
+                .limit(limit)
+                .fetchInto(EmplList.class);
+    }
 }

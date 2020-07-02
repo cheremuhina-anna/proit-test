@@ -3,6 +3,7 @@ package proit.test.controllers;
 import org.jooq.util.maven.example.tables.pojos.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import proit.test.models.EmplList;
 import proit.test.models.EmplListOnPage;
 import proit.test.models.EmplNode;
 import proit.test.services.EmplService;
@@ -21,6 +22,14 @@ public class EmplController {
     @GetMapping
     public EmplListOnPage showEmplPage(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
         return new EmplListOnPage(service.countEmpl(), service.selectPage(offset, limit));
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/{type}/{filter}")
+    public EmplListOnPage showPageOrg(@PathVariable("type") String type, @PathVariable("filter") String filter, @RequestParam("offset") int offset, @RequestParam("limit") int limit) {
+        System.out.println(filter);
+        List<EmplList> listEmpl = service.getFilterEmplList(type, filter, offset, limit);
+        return new EmplListOnPage(listEmpl.size(), listEmpl);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")

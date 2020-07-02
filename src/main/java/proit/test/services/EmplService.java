@@ -105,4 +105,15 @@ public class EmplService {
             return list;
         }
     }
+
+    public List<EmplList> getFilterEmplList(String type, String str, int offset, int limit) {
+        if (str.isEmpty())
+            return repo.selectPage(offset, limit);
+        else {
+            if (type.equals("name"))
+                return repo.namefilterEmplList(str, offset, limit);
+            else
+                return repo.orgfilterEmplList(str, offset, limit);
+        }
+    }
 }
