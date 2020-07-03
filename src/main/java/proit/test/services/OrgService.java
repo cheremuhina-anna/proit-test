@@ -86,14 +86,17 @@ public class OrgService {
 
 
     public List<Organization> listAllSubOrgs(UUID id_org) {
-        OrgNode temp = new OrgNode(getChildren(id_org));
-        List<Organization> list = new ArrayList<>();
-        list.add(repo.selectOrg(id_org));
-        for (OrgNode node: temp.getSubItems()) {
-            list.add(node.getValue());
-            list.addAll(orgFromNodes(node));
+        if(id_org == null) return Collections.emptyList();
+        else {
+            OrgNode temp = new OrgNode(getChildren(id_org));
+            List<Organization> list = new ArrayList<>();
+            list.add(repo.selectOrg(id_org));
+            for (OrgNode node : temp.getSubItems()) {
+                list.add(node.getValue());
+                list.addAll(orgFromNodes(node));
+            }
+            return list;
         }
-        return list;
     }
 
     public List<Organization> orgFromNodes(OrgNode node){
